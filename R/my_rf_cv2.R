@@ -4,6 +4,8 @@
 #'
 #' @param k Numeric input representing the number of folds.
 #'
+#' @keywords prediction
+#'
 #' @return Numeric output representing the cv error.
 #'
 #' @examples
@@ -25,7 +27,7 @@ my_rf_cv <- function(k) {
 
     predic <- predict(modele, data_testing[, -1])
 
-    MSE <- data.frame((predic - data_cleaned$body_mass_g[i])^2)
+    MSE <- (predic - data_cleaned$body_mass_g[i])^2
     }
 
 

@@ -9,6 +9,8 @@
 #' @return Returns a list of the t-value, degrees of freedom, alternative value,
 #'   and p-value.
 #'
+#' @keywords inference
+#'
 #' @examples
 #' my_t_test2(x, "two.sided", 0)
 #'

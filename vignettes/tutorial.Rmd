@@ -30,13 +30,14 @@ This package contains four mathematical functions that calculate t-test values,
 
 
 ```{r eval = TRUE}
-
+library(gapminder)
+data(gapminder)
+my_gapminder <- gapminder
 # Tutorial for my_t_test2
-my_data <- data.frame(my_gapminder2$lifeExp)
+my_data <- data.frame(my_gapminder$lifeExp)
 x <- as.numeric(my_data[[1]])
 alternative <- ("two-sided")
 mu <- 60
-p_value <- 0.05
 
 my_t_test2(x, "two-sided", mu)
 
@@ -45,17 +46,31 @@ my_t_test2(x, "less", mu)
 my_t_test2(x, "greater", mu)
 
 ```
-
+# The p-value is equal to alpha for the two-sided test, smaller than alpha in the
+# less than test, and greater than alpha in the greater than test. The only 
+# results that are statistically significant are the second set of tests, where 
+# P is less than alpha. 
 
 
 ```{r eval = TRUE}
 library(tidyverse)
 form <- (lifeExp ~ gdpPercap + continent)
-my_lm(form, my_gapminder2)
+lr <- my_lm(form, my_gapminder)
+
+x <- model.matrix(form, my_gapminder)
+beta <- matrix(lr$Estimate)
+
+plott <- x %*% beta
+
+
+plot(plott)
 
 ```
-
-
+# The gdpPercap coefficient is 4.4527 * 10^-4, so it is almost zero. It shows
+# that gdpPercap doesn't have much to do with life expectancy.The associated 
+# hypothesis are H0: p = 1/2 and Ha p != 1/2.
+# The actual versus fitted plot shows that they are actually not too far off the
+# values, so the model fit would be horizontal through the plot. 
 
 
 
@@ -63,6 +78,9 @@ my_lm(form, my_gapminder2)
 ```{r eval = TRUE}
 
 library(class)
+library(palmerpenguins)
+data(penguins)
+my_penguins <- penguins
 
 data_clean <- na.omit(my_penguins %>% select(species, body_mass_g, bill_length_mm, 
                                   bill_depth_mm, flipper_length_mm))
@@ -75,6 +93,15 @@ my_knn_cv(data_use, data_clean$species, k_nn = 1, k_cv = 5)
 my_knn_cv(data_use, data_clean$species, k_nn = 5, k_cv = 5)
 
 ```
+# Based on the CV error, I would be slightly inclined to go with the first model,
+# with k_nn = 1. The error is only slightly lower, so I don't think I would feel
+# super strongly either way. 
+# In k-fold cross validation, you are first splitting the data into k parts, 
+# using k-1 folds as the training data to fit the model, using the remaining fold
+# as test data and make predictions. You then switch which fold is the test data
+# until every fold has been the test data, then compute the squared error. It is 
+# useful because it ensures each unit of data has been used as test data, so it 
+# it is a very thorough method. 
 
 
 ```{r eval = TRUE}
@@ -87,6 +114,7 @@ data <- data.frame(my_penguins)
 # Cleans the data
 data_cleaned <- my_penguins %>% select(species, body_mass_g, bill_length_mm, 
                                   bill_depth_mm, flipper_length_mm) %>% na.omit()
+avg_MSE <- 0
 
 k2 <- my_rf_cv(2)
 
@@ -94,24 +122,34 @@ k5 <- my_rf_cv(5)
 
 k10 <- my_rf_cv(10)
 
-ggplot(data = data_cleaned, 
+f1 <- ggplot(data = data_cleaned, 
        aes(x = bill_length_mm, y = body_mass_g)) +
   geom_boxplot(fill = "lightgreen") 
 
-ggplot(data = data_cleaned, 
+f2 <- ggplot(data = data_cleaned, 
        aes(x = bill_depth_mm, y = body_mass_g)) +
   geom_boxplot(fill = "lightgreen")
 
-ggplot(data = data_cleaned, 
+f3 <- ggplot(data = data_cleaned, 
        aes(x = flipper_length_mm, y = body_mass_g)) +
   geom_boxplot(fill = "lightgreen")
 
 my_table <- matrix(rep(3, times = 6), ncol = 2, byrow = TRUE)
 colnames(my_table) <- c("Mean", "SD")
 rownames(my_table) <- c("k = 2", "k = 5", "k = 10")
+my_table[1,1] = k2
+my_table[2,1] = k5
+my_table[3,1] = k10
+my_table[1,2] = sd(k2)
+my_table[2,2] = sd(k5)
+my_table[3,2] = sd(k10)
 my_table
-```
 
+```
+# It appears the smaller k is, the larger the mean is. There is a huge drop 
+# between k = 2 and k = 10. I think this is probably the case because as k 
+# becomes larger, there are more runs through the data so the data becomes 
+# more accurate, and therefore the mean is smaller. 
 
 
 

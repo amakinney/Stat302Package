@@ -1,0 +1,16 @@
+Package: Stat302Package
+Title: Statistical Functions
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Amanda",
+           family = "Kinney",
+           role = c("aut", "cre"),
+           email = "amakinney@outlook.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: This package runs several functions through raw data so they can 
+  be tested and demonstrates their use on data. 
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1

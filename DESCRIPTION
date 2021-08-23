@@ -8,9 +8,15 @@ Authors@R:
            email = "amakinney@outlook.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: This package runs several functions through raw data so they can 
-  be tested and demonstrates their use on data. 
+  usethbe tested and demonstrates their use on data. 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Suggests: 
+    testthat (>= 3.0.0),
+    covr,
+    knitr,
+    rmarkdown
+Config/testthat/edition: 3

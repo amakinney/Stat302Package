@@ -1,0 +1,141 @@
+---
+title: "Project 3: Sec302Package Tutorial"
+author: "Amanda Kinney"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Sec302Package Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(Stat302Package)
+```
+
+```{r eval = FALSE}
+This package contains four mathematical functions that calculate t-test values,
+  linear regression, and two functions that predict output. To install this
+  package from Github, you must first install the package "devtools" in R and
+  then in your console, type devtools::install_github("amakinney/Stat302Package")
+  then call the package using the library function. 
+
+```
+
+
+```{r eval = TRUE}
+
+# Tutorial for my_t_test2
+my_data <- data.frame(my_gapminder2$lifeExp)
+x <- as.numeric(my_data[[1]])
+alternative <- ("two-sided")
+mu <- 60
+p_value <- 0.05
+
+my_t_test2(x, "two-sided", mu)
+
+my_t_test2(x, "less", mu)
+
+my_t_test2(x, "greater", mu)
+
+```
+
+
+
+```{r eval = TRUE}
+library(tidyverse)
+form <- (lifeExp ~ gdpPercap + continent)
+my_lm(form, my_gapminder2)
+
+```
+
+
+
+
+
+
+```{r eval = TRUE}
+
+library(class)
+
+data_clean <- na.omit(my_penguins %>% select(species, body_mass_g, bill_length_mm, 
+                                  bill_depth_mm, flipper_length_mm))
+data_use <- data_clean %>% select(body_mass_g, bill_length_mm, 
+                                  bill_depth_mm, flipper_length_mm)
+
+
+my_knn_cv(data_use, data_clean$species, k_nn = 1, k_cv = 5)
+
+my_knn_cv(data_use, data_clean$species, k_nn = 5, k_cv = 5)
+
+```
+
+
+```{r eval = TRUE}
+library(randomForest)
+library(ggplot2)
+set.seed(123)
+
+data <- data.frame(my_penguins)
+
+# Cleans the data
+data_cleaned <- my_penguins %>% select(species, body_mass_g, bill_length_mm, 
+                                  bill_depth_mm, flipper_length_mm) %>% na.omit()
+
+k2 <- my_rf_cv(2)
+
+k5 <- my_rf_cv(5)
+
+k10 <- my_rf_cv(10)
+
+ggplot(data = data_cleaned, 
+       aes(x = bill_length_mm, y = body_mass_g)) +
+  geom_boxplot(fill = "lightgreen") 
+
+ggplot(data = data_cleaned, 
+       aes(x = bill_depth_mm, y = body_mass_g)) +
+  geom_boxplot(fill = "lightgreen")
+
+ggplot(data = data_cleaned, 
+       aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_boxplot(fill = "lightgreen")
+
+my_table <- matrix(rep(3, times = 6), ncol = 2, byrow = TRUE)
+colnames(my_table) <- c("Mean", "SD")
+rownames(my_table) <- c("k = 2", "k = 5", "k = 10")
+my_table
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
